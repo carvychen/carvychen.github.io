@@ -1,11 +1,11 @@
 ---
 title: Markdown Cheat Sheet
 description: Quick reference guide that lists commonly used Markdown syntax and examples.
-author: jiaweichen
+author: Jameel
 date: 2025-01-25 11:33:40 +0800
 categories:
   - Engineering
-  - Writing
+  - Formatting
 tags:
   - markdown
 pin: false
@@ -40,11 +40,6 @@ Markdown is a plain text formatting syntax designed for creating rich-text conte
 #### Heading 4
 {: data-toc-skip=''}
 
-##### Heading 5
-{: data-toc-skip=''}
-
-###### Heading 6
-{: data-toc-skip=''}
 <!-- markdownlint-restore -->
 
 ```md
@@ -55,10 +50,6 @@ Markdown is a plain text formatting syntax designed for creating rich-text conte
 ### Heading 3
 
 #### Heading 4
-
-##### Heading 5
-
-###### Heading 6
 ```
 
 ## Text styles
@@ -215,7 +206,7 @@ Superscript <sup>The quick brown fox jumps over the lazy dog.</sup>
 
 ### Text Color
 
-[MathJax](#Mathematics) syntax: [mathjax color](https://github.com/lifeparticle/Markdown-Cheatsheet/blob/main/MathJax.md)
+[MathJax](#mathematics) syntax: [mathjax color](https://github.com/lifeparticle/Markdown-Cheatsheet/blob/main/MathJax.md)
 
 ### Multiline
 

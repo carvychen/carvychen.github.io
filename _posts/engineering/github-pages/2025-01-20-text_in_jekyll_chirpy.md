@@ -1,15 +1,14 @@
 ---
-title: Text in Jeklly Chirpy
+title: Text in Jekyll Chirpy
 description: Chirpy template examples of text, typography, math equations, diagrams, images, videos, and more.
-author: jiaweichen
+author: Jameel
 date: 2025-01-20 18:09:30 +0800
 categories:
   - Engineering
-  - Github-Pages
+  - Formatting
 tags:
-  - github-pages
-  - jeklly
-  - chirpy
+  - jekyll-chirpy
+  - markdown
 pin: false
 math: true
 mermaid: true
@@ -33,6 +32,16 @@ comments: false
 {: data-toc-skip='' .mt-4 }
 <!-- markdownlint-restore -->
 
+```md
+# Heading 1
+
+## Heading 2
+
+### Heading 3
+
+#### Heading 4
+```
+
 ## Paragraph
 
 Quisque egestas convallis ipsum, ut sollicitudin risus tincidunt a. Maecenas interdum malesuada egestas. Duis consectetur porta risus, sit amet vulputate urna facilisis ac. Phasellus semper dui non purus ultrices sodales. Aliquam ante lorem, ornare a feugiat ac, finibus nec mauris. Vivamus ut tristique nisi. Sed vel leo vulputate, efficitur risus non, posuere mi. Nullam tincidunt bibendum rutrum. Proin commodo ornare sapien. Vivamus interdum diam sed sapien blandit, sit amet aliquam risus mattis. Nullam arcu turpis, mollis quis laoreet at, placerat id nibh. Suspendisse venenatis eros eros.
@@ -45,11 +54,23 @@ Quisque egestas convallis ipsum, ut sollicitudin risus tincidunt a. Maecenas int
 2. Secondly
 3. Thirdly
 
+```md
+1. Firstly
+2. Secondly
+3. Thirdly
+```
+
 ### Unordered list
 
 - Chapter
   - Section
     - Paragraph
+
+```md
+- Chapter
+  - Section
+    - Paragraph
+```
 
 ### ToDo list
 
@@ -57,6 +78,13 @@ Quisque egestas convallis ipsum, ut sollicitudin risus tincidunt a. Maecenas int
   - [x] Step 1
   - [x] Step 2
   - [ ] Step 3
+
+```md
+- [ ] Job
+  - [x] Step 1
+  - [x] Step 2
+  - [ ] Step 3
+```
 
 ### Description list
 
@@ -66,9 +94,21 @@ Sun
 Moon
 : the natural satellite of the earth, visible by reflected light from the sun
 
+```md
+Sun
+: the star around which the earth orbits
+
+Moon
+: the natural satellite of the earth, visible by reflected light from the sun
+```
+
 ## Block Quote
 
 > This line shows the _block quote_.
+
+```md
+> This line shows the _block quote_.
+```
 
 ## Prompts
 
@@ -87,6 +127,19 @@ Moon
 {: .prompt-danger }
 <!-- markdownlint-restore -->
 
+```md
+> An example showing the `tip` type prompt.
+{: .prompt-tip }
+
+> An example showing the `info` type prompt.
+{: .prompt-info }
+
+> An example showing the `warning` type prompt.
+{: .prompt-warning }
+
+> An example showing the `danger` type prompt.
+{: .prompt-danger }
+```
 
 ## Tables
 
@@ -96,21 +149,45 @@ Moon
 | Island Trading               | Helen Bennett    |      UK |
 | Magazzini Alimentari Riuniti | Giovanni Rovelli |   Italy |
 
+```md
+| Company                      | Contact          | Country |
+| :--------------------------- | :--------------- | ------: |
+| Alfreds Futterkiste          | Maria Anders     | Germany |
+| Island Trading               | Helen Bennett    |      UK |
+| Magazzini Alimentari Riuniti | Giovanni Rovelli |   Italy |
+```
+
 ## Links
 
 <http://127.0.0.1:4000>
+
+```md
+<http://127.0.0.1:4000>
+```
 
 ## Footnote
 
 Click the hook will locate the footnote[^footnote], and here is another footnote[^fn-nth-2].
 
+```md
+Click the hook will locate the footnote[^footnote], and here is another footnote[^fn-nth-2].
+```
+
 ## Inline code
 
 This is an example of `Inline Code`.
 
+```md
+This is an example of `Inline Code`.
+```
+
 ## Filepath
 
 Here is the `/path/to/the/file.extend`{: .filepath}.
+
+```md
+Here is the `/path/to/the/file.extend`{: .filepath}.
+```
 
 ## Code blocks
 
@@ -119,6 +196,12 @@ Here is the `/path/to/the/file.extend`{: .filepath}.
 ```text
 This is a common code snippet, without syntax highlight and line number.
 ```
+
+````md
+```text
+This is a common code snippet, without syntax highlight and line number.
+```
+````
 
 ### Specific Language
 
@@ -129,6 +212,15 @@ if [ $? -ne 0 ]; then
 fi;
 ```
 
+````md
+```bash
+if [ $? -ne 0 ]; then
+  echo "The command was not successful.";
+  #do the needful / exit
+fi;
+```
+````
+
 ### Specific filename
 
 ```sass
@@ -137,6 +229,15 @@ fi;
   "colors/dark-typography";
 ```
 {: file='_sass/jekyll-theme-chirpy.scss'}
+
+````md
+```sass
+@import
+  "colors/light-typography",
+  "colors/dark-typography";
+```
+{: file='_sass/jekyll-theme-chirpy.scss'}
+````
 
 ## Mathematics
 
@@ -165,10 +266,25 @@ $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
   cherry :active, c, after b a, 1d
 ```
 
+````md
+```mermaid
+ gantt
+  title  Adding GANTT diagram functionality to mermaid
+  apple :a, 2017-07-20, 1w
+  banana :crit, b, 2017-07-23, 1d
+  cherry :active, c, after b a, 1d
+```
+````
+
 ### Default (with caption)
 
 ![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" }
 _Full screen width and center alignment_
+
+```md
+![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" }
+_Full screen width and center alignment_
+```
 
 ### Left aligned
 
@@ -194,6 +310,10 @@ The image below will toggle dark/light mode based on theme preference, notice it
 ## Video
 
 {% include embed/youtube.html id='wjZofJX0v4M' %}
+
+```md
+{% include embed/youtube.html id='wjZofJX0v4M' %}
+```
 
 ## Reverse Footnote
 

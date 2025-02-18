@@ -16,7 +16,7 @@ timezone: Asia/Shanghai
 
 title: Jam’Log # the main title
 
-tagline: Hi, this is Jameel — documenting my learning notes incrementally. # it will display as the subtitle
+tagline: 👋 Hi, this is Jameel — documenting my learning notes continuously. # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   Jam’Log is my space for documenting learning notes and exploring ideas.
@@ -25,8 +25,8 @@ description: >- # used by seo meta and the atom feed
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
 url: "https://carvychen.github.io"
 
-github:
-  username: carvychen # change to your GitHub username
+# github:
+#   username: username # change to your GitHub username
 
 # twitter:
 #   username: username # change to your Twitter username
@@ -34,7 +34,7 @@ github:
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
-  name: jiaweichen
+  name: Jameel
   email: carvychen@gmail.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
