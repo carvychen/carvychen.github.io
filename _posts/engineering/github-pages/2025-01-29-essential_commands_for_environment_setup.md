@@ -14,8 +14,6 @@ mermaid: true
 comments: false
 ---
 
-> This guide provides key commands for managing system configurations and setting up environments, designed for quick and easy reference.
-{: .prompt-tip}
 
 ## Conda
 
@@ -222,13 +220,13 @@ export LD_LIBRARY_PATH=/usr/local/cuda-11.8/lib64:$LD_LIBRARY_PATH
 
 ### Install with Conda
 
+> For detailed instructions on installing PyTorch, refer to the [official documentation](https://pytorch.org/get-started/locally/).
+{: .prompt-tip}
+
 ```bash
 # install PyTorch 2.4.0 with CUDA 12.1 support in your Conda environment
 conda install pytorch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0 pytorch-cuda=12.1 -c pytorch -c nvidia
 ```
-
-> For detailed instructions on installing PyTorch, refer to the [official documentation](https://pytorch.org/get-started/locally/).
-{: .prompt-tip}
 
 ### Install with Pip
 
