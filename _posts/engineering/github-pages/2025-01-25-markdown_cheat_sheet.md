@@ -10,7 +10,7 @@ tags:
   - markdown
 pin: false
 math: true
-mermaid: true
+mermaid: false
 comments: false
 ---
 
