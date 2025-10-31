@@ -120,11 +120,12 @@ uv run ruff format
 
 ```toml
 [project]
-name = "numbers"
+name = "your-project-name"
 version = "1.0.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
+keywords = ["xxx", "yyy"]
 maintainers = [
     { name = "xxx", email = "xxx@yyy.com" },
 ]
@@ -140,21 +141,16 @@ dependencies = [
 [project.urls]
 Repository = ""
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[dependency-groups]
-dev = [
-    "ruff>=0.11.12",
+[project.optional-dependencies]
+test = [
+    "pytest>=8.3.0",
+    "pytest-cov>=5.0.0",
 ]
 
 [tool.ruff]
 exclude = [ ".venv", "generated" ]
 extend-exclude = [ "*_pb2.py" ]
-line-length = 100
-indent-width = 4
-target-version = "py311"
+line-length = 110
 
 [tool.ruff.lint]
 select = [
@@ -167,12 +163,20 @@ select = [
     "ASYNC", # 异步代码检查
     "PL"     # pylint 规则
 ]
-ignore = []
+ignore = [ "E501", "PLR2004", "PLR0913]
 
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
 docstring-code-format = true
+
+[tool.basedpyright]
+typeCheckingMode = "off"
+reportArgumentType = "error"
+reportCallIssue = "error"
+reportAttributeAccessIssue = "error"
+reportUnboundVariable = "error"
+reportPossiblyUnboundVariable = "error"
 
 [tool.uv]
 no-build-isolation-package = []
