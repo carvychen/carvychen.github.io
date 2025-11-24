@@ -14,7 +14,8 @@
                         secondary: '#88B04B', 
                         accent: '#E27D60',
                         background: '#F7F9F9',
-                        dark: '#2C3E50'
+                        dark: '#2C3E50',
+                        purple: '#9B72AA'
                     }
                 }
             }
@@ -59,12 +60,14 @@
 
     <header class="max-w-6xl mx-auto mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-dark tracking-tight">👩‍⚕️ 饮食呵护指南</h1>
-            <p class="text-slate-500 mt-1">针对多囊 (PCOS) + 胰岛素抵抗 (IR) + 胃食道反流 (GERD)</p>
+            <div class="flex items-center gap-2">
+                <h1 class="text-3xl font-bold text-dark tracking-tight">👩‍⚕️ 阿言饮食指南</h1>
+            </div>
+            <p class="text-slate-500 mt-1 text-sm">为多囊(PCOS) 胰岛素抵抗(IR) 食道反流(GERD) 高尿酸(Gout) 提供饮食指导</p>
         </div>
         <div class="flex gap-3">
             <button onclick="resetToDefault()" class="text-sm text-slate-400 hover:text-red-500 underline decoration-dotted">
-                ↺ 恢复初始设置
+                ↺ 恢复/更新到最新指南
             </button>
             <button onclick="window.print()" class="hidden md:flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-50 hover:text-primary transition">
                 🖨️ 打印本页
@@ -77,15 +80,16 @@
         <aside class="md:col-span-3 space-y-6">
             <div class="bg-red-50 border border-red-100 rounded-2xl p-5 shadow-sm">
                 <div class="flex items-center gap-2 mb-3 text-accent font-bold text-lg">
-                    <span>🚫</span> 绝对禁忌
+                    <span>🚫</span> 禁忌清单
                 </div>
-                <div class="flex flex-wrap gap-2 text-sm">
-                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">☕ 咖啡/浓茶</span>
-                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">🍫 巧克力/薄荷</span>
-                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">🥗 生冷沙拉</span>
-                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">🥣 稀粥汤水</span>
-                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">🌶️ 辛辣油炸</span>
+                <div class="flex flex-wrap gap-2 text-sm mb-3">
+                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded font-bold">🥩 浓肉汤/火锅汤</span>
+                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">🦪 贝壳/内脏</span>
+                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">🦐 虾蟹/小鱼干</span>
+                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">🧴 蚝油/鸡精</span>
+                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">🥤 果汁/甜饮</span>
                 </div>
+                <p class="text-xs text-red-500 leading-tight">⚠️ <strong>肉汤警告：</strong>嘌呤易溶于水，请坚持“吃肉不喝汤”。</p>
             </div>
 
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
@@ -93,9 +97,9 @@
                     <span>🛡️</span> 核心原则
                 </div>
                 <ul class="space-y-3 text-sm text-slate-600">
-                    <li class="flex gap-2"><span class="text-secondary font-bold">1.</span><span><strong>粗粮细做：</strong>煮烂或打糊。</span></li>
-                    <li class="flex gap-2"><span class="text-secondary font-bold">2.</span><span><strong>蔬菜全熟：</strong>减少食道摩擦。</span></li>
-                    <li class="flex gap-2"><span class="text-secondary font-bold">3.</span><span><strong>晚餐早吃：</strong>18:30前结束。</span></li>
+                    <li class="flex gap-2"><span class="text-secondary font-bold">1.</span><span><strong>核心技术“焯水”：</strong>肉类和蔬菜烹饪前必须焯水（去嘌呤/去草酸/去血水）。</span></li>
+                    <li class="flex gap-2"><span class="text-secondary font-bold">2.</span><span><strong>蛋白质更替：</strong>拒绝鸭/羊。首选鸡蛋、牛奶、鸡肉（去皮）、淡水鱼。</span></li>
+                    <li class="flex gap-2"><span class="text-secondary font-bold">3.</span><span><strong>只喝水：</strong>不喝汤、茶、咖啡。每天2000ml温水，分次小口慢饮。</span></li>
                 </ul>
             </div>
         </aside>
@@ -119,8 +123,19 @@
                 </div>
             </div>
 
-            <div class="mt-4 text-center text-xs text-slate-400">
-                ✏️ 提示：点击文字直接修改，系统会在您停止输入1秒后自动同步到云端。
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                <div class="bg-blue-50 p-4 rounded-xl flex flex-col gap-2">
+                    <h4 class="font-bold text-primary">🥘 烹饪重点</h4>
+                    <p class="text-xs text-slate-600">所有肉类冷水下锅焯水撇浮沫。蔬菜沸水焯烫。蒸、煮、炖为主，<strong>肉汤坚决不喝</strong>。</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-xl flex flex-col gap-2">
+                    <h4 class="font-bold text-secondary">🧂 调味减法</h4>
+                    <p class="text-xs text-slate-600">❌去醋（防反流）、❌去蚝油/鸡精（防高尿酸）、❌去糖（防IR）。✅只用盐+生抽。</p>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-xl flex flex-col gap-2">
+                    <h4 class="font-bold text-purple">💧 饮水策略</h4>
+                    <p class="text-xs text-slate-600">总量>2000ml排尿酸。随身带杯，每20分钟喝两口，<strong>小口慢饮</strong>防止水压引起反酸。</p>
+                </div>
             </div>
 
         </section>
@@ -136,15 +151,15 @@
 
         const API_URL = `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/${BASKET_NAME}`;
 
-        // 原始默认数据
+        // 🟢 2024 更新版食谱数据 (无鸭无羊/低嘌呤/去汤)
         const rawMealData = {
-            mon: { theme: "🟢 周一：舒缓护胃日", breakfast: "小米燕麦粥（煮稠）+ 煮鸡蛋（蛋白或碾碎）+ 蒸南瓜", lunch: "软米饭 + 清蒸鸡腿肉（去皮）+ 上汤娃娃菜（煮软）", snack: "苏打饼干 2片 + 温开水", dinner: "豆腐鱼汤（鲈鱼/龙利鱼）+ 清炒西葫芦 + 蒸山药段" },
-            tue: { theme: "🔵 周二：抗炎调理日", breakfast: "全麦馒头 1个 + 无糖温豆浆 + 核桃仁 2个", lunch: "热汤荞麦面（清汤）+ 西兰花炒虾仁 + 清炒油麦菜", snack: "半根香蕉", dinner: "冬瓜瘦肉丸子汤 + 白灼秋葵 + 玉米段 1小段" },
-            wed: { theme: "🟡 周三：植物蛋白日", breakfast: "山药红豆粥（去皮感）+ 蒸蛋羹", lunch: "二米饭 + 香菇扒油菜 + 彩椒炒肉丝", snack: "温热无糖杏仁奶", dinner: "清炖牛腩（去油）+ 白萝卜 + 菠菜" },
-            thu: { theme: "🟣 周四：深海鱼油日", breakfast: "蒸紫薯 + 无糖豆浆 + 水煮蛋", lunch: "杂粮软饭 + 清蒸鳕鱼 + 蒜蓉蒸茄子", snack: "无糖酸奶 + 巴旦木", dinner: "西红柿鸡蛋疙瘩汤 + 焯水生菜" },
-            fri: { theme: "⚪ 周五：温补养气日", breakfast: "厚蛋烧 + 燕麦糊 + 小番茄", lunch: "软米饭 + 土豆炖鸡块 + 炒合菜", snack: "半个苹果（削皮）", dinner: "菌菇豆腐汤 + 虾滑 + 蒸芋头" },
-            sat: { theme: "🟤 周六：轻断食调整日", breakfast: "全麦吐司 + 牛油果泥 + 煮蛋白", lunch: "什锦烩饭（焖软）+ 裙带菜汤", snack: "苏打饼干", dinner: "大白菜炖豆腐 + 蒸红薯" },
-            sun: { theme: "🔴 周日：家庭享味日", breakfast: "菜团子 + 无糖豆浆", lunch: "软米饭 + 葱油淋鸡 + 耗油生菜 + 丝瓜炒蛋", snack: "蓝莓", dinner: "清汤火锅（不喝汤）: 鱼片、豆腐、蔬菜" }
+            mon: { theme: "🟢 周一：舒缓低嘌呤日 (蛋奶为主)", breakfast: "小米燕麦粥（煮稠）+ 煮鸡蛋 1个 + 蒸南瓜", lunch: "软米饭 + 滑蛋炒鸡柳（去筋膜）+ 上汤娃娃菜（❌不喝汤）", snack: "苏打饼干 2片 + 温开水", dinner: "清蒸鲈鱼（优质蛋白/无细刺）+ 蒸山药段 + 清炒西葫芦" },
+            tue: { theme: "🔵 周二：抗炎排酸日 (十字花科)", breakfast: "全麦馒头 1个 + 低脂/脱脂奶 + 核桃仁 2个", lunch: "热汤荞麦面（清汤底/勿用肉汤）+ 木耳炒肉片 + 焯水西兰花", snack: "半根香蕉", dinner: "冬瓜炒肉末（冬瓜利尿/非汤）+ 白灼秋葵 + 玉米段" },
+            wed: { theme: "🟡 周三：植物调理日 (豆蛋结合)", breakfast: "山药大米粥 + 蒸蛋羹", lunch: "二米饭 + 家常豆腐（煎至金黄再烧）+ 彩椒炒肉丝", snack: "温热无糖杏仁奶", dinner: "番茄炒蛋（去皮去酸）+ 清炒菠菜（⚠️必焯水）+ 少许米饭" },
+            thu: { theme: "🟣 周四：温和白肉日 (鸡肉体力)", breakfast: "蒸紫薯 + 低脂奶 + 水煮蛋", lunch: "杂粮软饭 + 清蒸鸡腿（去皮/软烂）+ 蒜蓉蒸茄子", snack: "无糖酸奶 (常温)", dinner: "白菜猪肉炖粉条（少肉多菜/粉条软/不喝汤）+ 焯水生菜" },
+            fri: { theme: "⚪ 周五：清淡养胃日 (易消化)", breakfast: "厚蛋烧（少油）+ 燕麦糊 + 蒸胡萝卜", lunch: "软米饭 + 土豆炖鸡块（替代鸭肉/软烂）+ 炒合菜（豆芽粉丝）", snack: "半个苹果（削皮）", dinner: "丝瓜炒鸡蛋（利尿消肿）+ 蒸芋头 + 少量瘦肉片汤（只吃肉）" },
+            sat: { theme: "🟤 周六：极简调整日 (代谢休息)", breakfast: "全麦吐司（去边）+ 煮蛋白 2个 + 牛油果泥", lunch: "什锦炒软饭（蛋/胡萝卜/肉丁/豌豆）+ 紫菜蛋花汤（少紫菜）", snack: "苏打饼干", dinner: "大白菜炖豆腐（清淡）+ 一小段蒸红薯" },
+            sun: { theme: "🔴 周日：家庭享味日 (忌海鲜火锅)", breakfast: "菜团子 + 低脂奶", lunch: "软米饭 + 葱油淋鸡（白斩鸡/去皮吃肉）+ 蚝油生菜（少放蚝油）+ 西葫芦炒蛋", snack: "几颗蓝莓", dinner: "蒸菜拼盘：蒸南瓜/豆角/排骨(去肥)/鱼片 (❌无老火汤)" }
         };
 
         function textToListHTML(text) {
@@ -156,57 +171,37 @@
         let currentData = {};
         let saveTimeout;
 
-        // 状态指示器控制
         function showStatus(type) {
             const el = document.getElementById('status-indicator');
             const icon = document.getElementById('status-icon');
             const text = document.getElementById('status-text');
-            
             el.className = 'visible';
             if (type === 'saving') {
-                icon.innerText = '⏳';
-                icon.className = 'spin';
-                text.innerText = '正在同步...';
-                el.style.color = '#769FCD';
+                icon.innerText = '⏳'; icon.className = 'spin'; text.innerText = '正在同步...'; el.style.color = '#769FCD';
             } else if (type === 'saved') {
-                icon.innerText = '✅';
-                icon.className = '';
-                text.innerText = '已同步到云端';
-                el.style.color = '#88B04B';
+                icon.innerText = '✅'; icon.className = ''; text.innerText = '已同步到云端'; el.style.color = '#88B04B';
                 setTimeout(() => { el.className = ''; }, 2000);
             } else if (type === 'error') {
-                icon.innerText = '❌';
-                icon.className = '';
-                text.innerText = '同步失败 (请检查网络/ID)';
-                el.style.color = '#E27D60';
+                icon.innerText = '❌'; icon.className = ''; text.innerText = '同步失败'; el.style.color = '#E27D60';
             }
         }
 
-        // 初始化数据（从云端拉取）
         async function initData() {
-            if (PANTRY_ID.includes("请把您的ID")) {
-                alert("请先在代码中填入您的 Pantry ID！");
-                return;
-            }
-
+            if (PANTRY_ID.includes("请把您的ID")) { alert("请在代码中填入您的 Pantry ID！"); return; }
             try {
                 const response = await fetch(API_URL);
                 if (response.ok) {
                     const jsonData = await response.json();
-                    currentData = jsonData; // 使用云端数据
+                    currentData = jsonData;
                     showStatus('saved');
                 } else {
-                    // 如果云端没有数据（第一次用），就用默认数据并上传
-                    console.log("云端无数据，初始化默认数据...");
                     useDefaultData();
                     saveData(true); 
                 }
             } catch (error) {
                 console.error("网络错误，使用默认数据", error);
-                useDefaultData(); // 网络错误时降级使用默认
+                useDefaultData();
             }
-            
-            // 渲染页面
             const activeDay = document.querySelector('.tab-active') ? document.querySelector('.tab-active').id.replace('tab-', '') : 'mon';
             switchDay(activeDay);
         }
@@ -221,12 +216,9 @@
             });
         }
 
-        // 保存到云端 (带防抖，防止输入太快频繁请求)
         function saveData(force = false) {
             showStatus('saving');
-            
             if (saveTimeout) clearTimeout(saveTimeout);
-
             const performSave = async () => {
                 try {
                     await fetch(API_URL, {
@@ -240,21 +232,17 @@
                     showStatus('error');
                 }
             };
-
-            if (force) {
-                performSave();
-            } else {
-                saveTimeout = setTimeout(performSave, 1500); // 停止输入1.5秒后才保存
-            }
+            if (force) performSave();
+            else saveTimeout = setTimeout(performSave, 1500);
         }
 
         function handleEdit(day, field, element) {
             currentData[day][field] = element.innerHTML; 
-            saveData(); // 触发保存逻辑
+            saveData();
         }
 
         function resetToDefault() {
-            if(confirm("确定要重置吗？这将覆盖云端的所有修改！")) {
+            if(confirm("⚠️ 确定要更新到最新的[低嘌呤]指南吗？\n\n这将覆盖云端以前的旧数据。")) {
                 useDefaultData();
                 saveData(true);
                 const activeKey = document.querySelector('.tab-active').id.replace('tab-', '');
@@ -265,8 +253,7 @@
         function renderDay(dayKey) {
             const data = currentData[dayKey];
             const container = document.getElementById('daily-content');
-            
-            if (!data) return; // 防止数据未加载时报错
+            if (!data) return; 
 
             container.innerHTML = `
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 animate-fade-in">
@@ -325,7 +312,9 @@
                 btn.classList.remove('tab-active', 'bg-white');
                 btn.classList.add('bg-white');
                 if(rawMealData[btn.id.replace('tab-', '')]) {
-                   btn.innerText = rawMealData[btn.id.replace('tab-', '')].theme.split('：')[0].split(' ')[1];
+                   // 简化TAB显示
+                   const fullTheme = rawMealData[btn.id.replace('tab-', '')].theme;
+                   btn.innerText = fullTheme.split(' ')[1].split(' ')[0]; 
                 }
             });
             const activeBtn = document.getElementById('tab-' + dayKey);
@@ -335,7 +324,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            initData(); // 启动时尝试加载云端数据
+            initData(); 
         });
     </script>
 </body>
