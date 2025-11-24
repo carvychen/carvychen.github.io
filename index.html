@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>三合一饮食呵护指南 (浅色晚餐版)</title>
+    <title>阿言饮食呵护指南</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,7 +12,7 @@
                     colors: {
                         primary: '#769FCD', 
                         secondary: '#88B04B', 
-                        accent: '#E27D60', // 陶土红
+                        accent: '#E27D60',
                         background: '#F7F9F9',
                         dark: '#2C3E50'
                     }
@@ -24,37 +24,38 @@
         body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background-color: #F7F9F9; color: #2C3E50; }
         .tab-active { background-color: #769FCD; color: white; font-weight: bold; border-color: #769FCD; }
         .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         
-        /* 编辑模式样式优化 */
         [contenteditable="true"] {
-            padding: 8px;
-            border-radius: 8px;
-            transition: all 0.2s;
-            cursor: text;
-            outline: none; 
+            padding: 8px; border-radius: 8px; transition: all 0.2s; cursor: text; outline: none;
         }
-        [contenteditable="true"]:hover {
-            background-color: rgba(255, 255, 255, 0.5); /* 半透明白色悬停 */
-            box-shadow: inset 0 0 0 1px #cbd5e1;
-        }
-        [contenteditable="true"]:focus {
-            background-color: white;
-            box-shadow: inset 0 0 0 1px #769FCD, 0 0 0 3px rgba(118, 159, 205, 0.1);
-        }
+        [contenteditable="true"]:hover { background-color: rgba(255, 255, 255, 0.5); box-shadow: inset 0 0 0 1px #cbd5e1; }
+        [contenteditable="true"]:focus { background-color: white; box-shadow: inset 0 0 0 1px #769FCD, 0 0 0 3px rgba(118, 159, 205, 0.1); }
         
-        /* 列表样式基础设定 */
         ul.editable-list { list-style-type: disc; padding-left: 1.25rem; }
         ul.editable-list li { margin-bottom: 0.25rem; }
-        /* 默认蓝色圆点 (早午餐用) */
         ul.editable-list li::marker { color: #769FCD; } 
-        
-        /* 【新】晚餐专用样式：圆点改为陶土红，配合暖色背景 */
         ul.dinner-list li::marker { color: #E27D60 !important; }
+
+        /* 状态指示器样式 */
+        #status-indicator {
+            position: fixed; bottom: 20px; right: 20px; 
+            padding: 8px 16px; background: white; border-radius: 20px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); font-size: 12px; 
+            display: flex; items-center: center; gap: 6px; 
+            transition: all 0.3s; opacity: 0; pointer-events: none; z-index: 50;
+        }
+        #status-indicator.visible { opacity: 1; transform: translateY(0); }
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8">
+
+    <div id="status-indicator">
+        <span id="status-icon">☁️</span>
+        <span id="status-text">已同步</span>
+    </div>
 
     <header class="max-w-6xl mx-auto mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
@@ -63,7 +64,7 @@
         </div>
         <div class="flex gap-3">
             <button onclick="resetToDefault()" class="text-sm text-slate-400 hover:text-red-500 underline decoration-dotted">
-                ↺ 恢复默认数据
+                ↺ 恢复初始设置
             </button>
             <button onclick="window.print()" class="hidden md:flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-50 hover:text-primary transition">
                 🖨️ 打印本页
@@ -111,17 +112,31 @@
                 <button onclick="switchDay('sun')" id="tab-sun" class="tab-btn px-5 py-2 rounded-full border border-slate-200 bg-white text-slate-600 text-sm whitespace-nowrap transition">周日</button>
             </div>
 
-            <div id="daily-content" class="space-y-6"></div>
+            <div id="daily-content" class="space-y-6 min-h-[400px]">
+                <div class="flex flex-col items-center justify-center h-64 text-slate-400">
+                    <div class="animate-spin text-3xl mb-2">☁️</div>
+                    <p>正在同步最新食谱...</p>
+                </div>
+            </div>
 
             <div class="mt-4 text-center text-xs text-slate-400">
-                ✏️ 提示：点击列表即可编辑，<strong>按回车键 (Enter)</strong> 可添加新的一行。
+                ✏️ 提示：点击文字直接修改，系统会在您停止输入1秒后自动同步到云端。
             </div>
 
         </section>
     </main>
 
     <script>
-        // 原始文本数据
+        // ==========================================
+        // ⚠️ 请在这里替换您的 PANTRY ID
+        // ==========================================
+        const PANTRY_ID = "e06ce567-a7aa-4022-8d91-7550a26c9edd"; 
+        const BASKET_NAME = "MyFamilyDiet"; 
+        // ==========================================
+
+        const API_URL = `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/${BASKET_NAME}`;
+
+        // 原始默认数据
         const rawMealData = {
             mon: { theme: "🟢 周一：舒缓护胃日", breakfast: "小米燕麦粥（煮稠）+ 煮鸡蛋（蛋白或碾碎）+ 蒸南瓜", lunch: "软米饭 + 清蒸鸡腿肉（去皮）+ 上汤娃娃菜（煮软）", snack: "苏打饼干 2片 + 温开水", dinner: "豆腐鱼汤（鲈鱼/龙利鱼）+ 清炒西葫芦 + 蒸山药段" },
             tue: { theme: "🔵 周二：抗炎调理日", breakfast: "全麦馒头 1个 + 无糖温豆浆 + 核桃仁 2个", lunch: "热汤荞麦面（清汤）+ 西兰花炒虾仁 + 清炒油麦菜", snack: "半根香蕉", dinner: "冬瓜瘦肉丸子汤 + 白灼秋葵 + 玉米段 1小段" },
@@ -132,7 +147,6 @@
             sun: { theme: "🔴 周日：家庭享味日", breakfast: "菜团子 + 无糖豆浆", lunch: "软米饭 + 葱油淋鸡 + 耗油生菜 + 丝瓜炒蛋", snack: "蓝莓", dinner: "清汤火锅（不喝汤）: 鱼片、豆腐、蔬菜" }
         };
 
-        // 辅助函数：将文本转换为 HTML 列表格式
         function textToListHTML(text) {
             if (!text) return "<li>点击输入...</li>";
             if (text.includes('<li')) return text;
@@ -140,36 +154,111 @@
         }
 
         let currentData = {};
+        let saveTimeout;
 
-        function initData() {
-            const saved = localStorage.getItem('dietPlanDataV2');
-            if (saved) {
-                currentData = JSON.parse(saved);
-            } else {
-                currentData = JSON.parse(JSON.stringify(rawMealData));
-                Object.keys(currentData).forEach(day => {
-                    currentData[day].breakfast = textToListHTML(currentData[day].breakfast);
-                    currentData[day].lunch = textToListHTML(currentData[day].lunch);
-                    currentData[day].snack = textToListHTML(currentData[day].snack);
-                    currentData[day].dinner = textToListHTML(currentData[day].dinner);
-                });
+        // 状态指示器控制
+        function showStatus(type) {
+            const el = document.getElementById('status-indicator');
+            const icon = document.getElementById('status-icon');
+            const text = document.getElementById('status-text');
+            
+            el.className = 'visible';
+            if (type === 'saving') {
+                icon.innerText = '⏳';
+                icon.className = 'spin';
+                text.innerText = '正在同步...';
+                el.style.color = '#769FCD';
+            } else if (type === 'saved') {
+                icon.innerText = '✅';
+                icon.className = '';
+                text.innerText = '已同步到云端';
+                el.style.color = '#88B04B';
+                setTimeout(() => { el.className = ''; }, 2000);
+            } else if (type === 'error') {
+                icon.innerText = '❌';
+                icon.className = '';
+                text.innerText = '同步失败 (请检查网络/ID)';
+                el.style.color = '#E27D60';
             }
         }
 
-        function saveData() {
-            localStorage.setItem('dietPlanDataV2', JSON.stringify(currentData));
+        // 初始化数据（从云端拉取）
+        async function initData() {
+            if (PANTRY_ID.includes("请把您的ID")) {
+                alert("请先在代码中填入您的 Pantry ID！");
+                return;
+            }
+
+            try {
+                const response = await fetch(API_URL);
+                if (response.ok) {
+                    const jsonData = await response.json();
+                    currentData = jsonData; // 使用云端数据
+                    showStatus('saved');
+                } else {
+                    // 如果云端没有数据（第一次用），就用默认数据并上传
+                    console.log("云端无数据，初始化默认数据...");
+                    useDefaultData();
+                    saveData(true); 
+                }
+            } catch (error) {
+                console.error("网络错误，使用默认数据", error);
+                useDefaultData(); // 网络错误时降级使用默认
+            }
+            
+            // 渲染页面
+            const activeDay = document.querySelector('.tab-active') ? document.querySelector('.tab-active').id.replace('tab-', '') : 'mon';
+            switchDay(activeDay);
+        }
+
+        function useDefaultData() {
+            currentData = JSON.parse(JSON.stringify(rawMealData));
+            Object.keys(currentData).forEach(day => {
+                currentData[day].breakfast = textToListHTML(currentData[day].breakfast);
+                currentData[day].lunch = textToListHTML(currentData[day].lunch);
+                currentData[day].snack = textToListHTML(currentData[day].snack);
+                currentData[day].dinner = textToListHTML(currentData[day].dinner);
+            });
+        }
+
+        // 保存到云端 (带防抖，防止输入太快频繁请求)
+        function saveData(force = false) {
+            showStatus('saving');
+            
+            if (saveTimeout) clearTimeout(saveTimeout);
+
+            const performSave = async () => {
+                try {
+                    await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(currentData)
+                    });
+                    showStatus('saved');
+                } catch (e) {
+                    console.error(e);
+                    showStatus('error');
+                }
+            };
+
+            if (force) {
+                performSave();
+            } else {
+                saveTimeout = setTimeout(performSave, 1500); // 停止输入1.5秒后才保存
+            }
         }
 
         function handleEdit(day, field, element) {
             currentData[day][field] = element.innerHTML; 
-            saveData();
+            saveData(); // 触发保存逻辑
         }
 
         function resetToDefault() {
-            if(confirm("确定要重置回初始状态吗？您的修改将被清空。")) {
-                localStorage.removeItem('dietPlanDataV2');
-                initData();
-                renderDay(document.querySelector('.tab-active').id.replace('tab-', ''));
+            if(confirm("确定要重置吗？这将覆盖云端的所有修改！")) {
+                useDefaultData();
+                saveData(true);
+                const activeKey = document.querySelector('.tab-active').id.replace('tab-', '');
+                renderDay(activeKey);
             }
         }
 
@@ -177,6 +266,8 @@
             const data = currentData[dayKey];
             const container = document.getElementById('daily-content');
             
+            if (!data) return; // 防止数据未加载时报错
+
             container.innerHTML = `
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 animate-fade-in">
                     <h2 class="text-xl font-bold text-dark mb-6 pb-4 border-b border-slate-100 flex items-center gap-2">
@@ -217,7 +308,8 @@
                         <div class="relative z-10">
                             <div class="flex items-center gap-2 mb-2">
                                 <span class="text-xl">🌙</span>
-                                <h3 class="font-bold text-slate-800">晚餐 Dinner</h3> <span class="bg-accent text-white text-xs px-2 py-0.5 rounded ml-2">18:30 前</span>
+                                <h3 class="font-bold text-slate-800">晚餐 Dinner</h3>
+                                <span class="bg-accent text-white text-xs px-2 py-0.5 rounded ml-2">18:30 前</span>
                             </div>
                             <ul class="editable-list dinner-list text-slate-600 leading-relaxed" 
                                contenteditable="true" 
@@ -232,7 +324,9 @@
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('tab-active', 'bg-white');
                 btn.classList.add('bg-white');
-                btn.innerText = rawMealData[btn.id.replace('tab-', '')].theme.split('：')[0].split(' ')[1];
+                if(rawMealData[btn.id.replace('tab-', '')]) {
+                   btn.innerText = rawMealData[btn.id.replace('tab-', '')].theme.split('：')[0].split(' ')[1];
+                }
             });
             const activeBtn = document.getElementById('tab-' + dayKey);
             activeBtn.classList.remove('bg-white');
@@ -241,8 +335,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            initData();
-            switchDay('mon');
+            initData(); // 启动时尝试加载云端数据
         });
     </script>
 </body>
