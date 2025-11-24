@@ -1,4 +1,249 @@
----
-layout: home
-# Index page
----
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三合一饮食呵护指南 (浅色晚餐版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#769FCD', 
+                        secondary: '#88B04B', 
+                        accent: '#E27D60', // 陶土红
+                        background: '#F7F9F9',
+                        dark: '#2C3E50'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background-color: #F7F9F9; color: #2C3E50; }
+        .tab-active { background-color: #769FCD; color: white; font-weight: bold; border-color: #769FCD; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        
+        /* 编辑模式样式优化 */
+        [contenteditable="true"] {
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: text;
+            outline: none; 
+        }
+        [contenteditable="true"]:hover {
+            background-color: rgba(255, 255, 255, 0.5); /* 半透明白色悬停 */
+            box-shadow: inset 0 0 0 1px #cbd5e1;
+        }
+        [contenteditable="true"]:focus {
+            background-color: white;
+            box-shadow: inset 0 0 0 1px #769FCD, 0 0 0 3px rgba(118, 159, 205, 0.1);
+        }
+        
+        /* 列表样式基础设定 */
+        ul.editable-list { list-style-type: disc; padding-left: 1.25rem; }
+        ul.editable-list li { margin-bottom: 0.25rem; }
+        /* 默认蓝色圆点 (早午餐用) */
+        ul.editable-list li::marker { color: #769FCD; } 
+        
+        /* 【新】晚餐专用样式：圆点改为陶土红，配合暖色背景 */
+        ul.dinner-list li::marker { color: #E27D60 !important; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <header class="max-w-6xl mx-auto mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-dark tracking-tight">👩‍⚕️ 饮食呵护指南</h1>
+            <p class="text-slate-500 mt-1">针对多囊 (PCOS) + 胰岛素抵抗 (IR) + 胃食道反流 (GERD)</p>
+        </div>
+        <div class="flex gap-3">
+            <button onclick="resetToDefault()" class="text-sm text-slate-400 hover:text-red-500 underline decoration-dotted">
+                ↺ 恢复默认数据
+            </button>
+            <button onclick="window.print()" class="hidden md:flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-50 hover:text-primary transition">
+                🖨️ 打印本页
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6">
+        
+        <aside class="md:col-span-3 space-y-6">
+            <div class="bg-red-50 border border-red-100 rounded-2xl p-5 shadow-sm">
+                <div class="flex items-center gap-2 mb-3 text-accent font-bold text-lg">
+                    <span>🚫</span> 绝对禁忌
+                </div>
+                <div class="flex flex-wrap gap-2 text-sm">
+                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">☕ 咖啡/浓茶</span>
+                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">🍫 巧克力/薄荷</span>
+                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">🥗 生冷沙拉</span>
+                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">🥣 稀粥汤水</span>
+                    <span class="px-2 py-1 bg-white border border-red-200 text-red-600 rounded">🌶️ 辛辣油炸</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                <div class="flex items-center gap-2 mb-3 text-secondary font-bold text-lg">
+                    <span>🛡️</span> 核心原则
+                </div>
+                <ul class="space-y-3 text-sm text-slate-600">
+                    <li class="flex gap-2"><span class="text-secondary font-bold">1.</span><span><strong>粗粮细做：</strong>煮烂或打糊。</span></li>
+                    <li class="flex gap-2"><span class="text-secondary font-bold">2.</span><span><strong>蔬菜全熟：</strong>减少食道摩擦。</span></li>
+                    <li class="flex gap-2"><span class="text-secondary font-bold">3.</span><span><strong>晚餐早吃：</strong>18:30前结束。</span></li>
+                </ul>
+            </div>
+        </aside>
+
+        <section class="md:col-span-9">
+            
+            <div class="flex overflow-x-auto gap-2 pb-4 mb-2 scrollbar-hide" id="dayTabs">
+                <button onclick="switchDay('mon')" id="tab-mon" class="tab-btn px-5 py-2 rounded-full border border-slate-200 bg-white text-slate-600 text-sm whitespace-nowrap transition">周一</button>
+                <button onclick="switchDay('tue')" id="tab-tue" class="tab-btn px-5 py-2 rounded-full border border-slate-200 bg-white text-slate-600 text-sm whitespace-nowrap transition">周二</button>
+                <button onclick="switchDay('wed')" id="tab-wed" class="tab-btn px-5 py-2 rounded-full border border-slate-200 bg-white text-slate-600 text-sm whitespace-nowrap transition">周三</button>
+                <button onclick="switchDay('thu')" id="tab-thu" class="tab-btn px-5 py-2 rounded-full border border-slate-200 bg-white text-slate-600 text-sm whitespace-nowrap transition">周四</button>
+                <button onclick="switchDay('fri')" id="tab-fri" class="tab-btn px-5 py-2 rounded-full border border-slate-200 bg-white text-slate-600 text-sm whitespace-nowrap transition">周五</button>
+                <button onclick="switchDay('sat')" id="tab-sat" class="tab-btn px-5 py-2 rounded-full border border-slate-200 bg-white text-slate-600 text-sm whitespace-nowrap transition">周六</button>
+                <button onclick="switchDay('sun')" id="tab-sun" class="tab-btn px-5 py-2 rounded-full border border-slate-200 bg-white text-slate-600 text-sm whitespace-nowrap transition">周日</button>
+            </div>
+
+            <div id="daily-content" class="space-y-6"></div>
+
+            <div class="mt-4 text-center text-xs text-slate-400">
+                ✏️ 提示：点击列表即可编辑，<strong>按回车键 (Enter)</strong> 可添加新的一行。
+            </div>
+
+        </section>
+    </main>
+
+    <script>
+        // 原始文本数据
+        const rawMealData = {
+            mon: { theme: "🟢 周一：舒缓护胃日", breakfast: "小米燕麦粥（煮稠）+ 煮鸡蛋（蛋白或碾碎）+ 蒸南瓜", lunch: "软米饭 + 清蒸鸡腿肉（去皮）+ 上汤娃娃菜（煮软）", snack: "苏打饼干 2片 + 温开水", dinner: "豆腐鱼汤（鲈鱼/龙利鱼）+ 清炒西葫芦 + 蒸山药段" },
+            tue: { theme: "🔵 周二：抗炎调理日", breakfast: "全麦馒头 1个 + 无糖温豆浆 + 核桃仁 2个", lunch: "热汤荞麦面（清汤）+ 西兰花炒虾仁 + 清炒油麦菜", snack: "半根香蕉", dinner: "冬瓜瘦肉丸子汤 + 白灼秋葵 + 玉米段 1小段" },
+            wed: { theme: "🟡 周三：植物蛋白日", breakfast: "山药红豆粥（去皮感）+ 蒸蛋羹", lunch: "二米饭 + 香菇扒油菜 + 彩椒炒肉丝", snack: "温热无糖杏仁奶", dinner: "清炖牛腩（去油）+ 白萝卜 + 菠菜" },
+            thu: { theme: "🟣 周四：深海鱼油日", breakfast: "蒸紫薯 + 无糖豆浆 + 水煮蛋", lunch: "杂粮软饭 + 清蒸鳕鱼 + 蒜蓉蒸茄子", snack: "无糖酸奶 + 巴旦木", dinner: "西红柿鸡蛋疙瘩汤 + 焯水生菜" },
+            fri: { theme: "⚪ 周五：温补养气日", breakfast: "厚蛋烧 + 燕麦糊 + 小番茄", lunch: "软米饭 + 土豆炖鸡块 + 炒合菜", snack: "半个苹果（削皮）", dinner: "菌菇豆腐汤 + 虾滑 + 蒸芋头" },
+            sat: { theme: "🟤 周六：轻断食调整日", breakfast: "全麦吐司 + 牛油果泥 + 煮蛋白", lunch: "什锦烩饭（焖软）+ 裙带菜汤", snack: "苏打饼干", dinner: "大白菜炖豆腐 + 蒸红薯" },
+            sun: { theme: "🔴 周日：家庭享味日", breakfast: "菜团子 + 无糖豆浆", lunch: "软米饭 + 葱油淋鸡 + 耗油生菜 + 丝瓜炒蛋", snack: "蓝莓", dinner: "清汤火锅（不喝汤）: 鱼片、豆腐、蔬菜" }
+        };
+
+        // 辅助函数：将文本转换为 HTML 列表格式
+        function textToListHTML(text) {
+            if (!text) return "<li>点击输入...</li>";
+            if (text.includes('<li')) return text;
+            return text.split('+').map(item => `<li>${item.trim()}</li>`).join('');
+        }
+
+        let currentData = {};
+
+        function initData() {
+            const saved = localStorage.getItem('dietPlanDataV2');
+            if (saved) {
+                currentData = JSON.parse(saved);
+            } else {
+                currentData = JSON.parse(JSON.stringify(rawMealData));
+                Object.keys(currentData).forEach(day => {
+                    currentData[day].breakfast = textToListHTML(currentData[day].breakfast);
+                    currentData[day].lunch = textToListHTML(currentData[day].lunch);
+                    currentData[day].snack = textToListHTML(currentData[day].snack);
+                    currentData[day].dinner = textToListHTML(currentData[day].dinner);
+                });
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('dietPlanDataV2', JSON.stringify(currentData));
+        }
+
+        function handleEdit(day, field, element) {
+            currentData[day][field] = element.innerHTML; 
+            saveData();
+        }
+
+        function resetToDefault() {
+            if(confirm("确定要重置回初始状态吗？您的修改将被清空。")) {
+                localStorage.removeItem('dietPlanDataV2');
+                initData();
+                renderDay(document.querySelector('.tab-active').id.replace('tab-', ''));
+            }
+        }
+
+        function renderDay(dayKey) {
+            const data = currentData[dayKey];
+            const container = document.getElementById('daily-content');
+            
+            container.innerHTML = `
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 animate-fade-in">
+                    <h2 class="text-xl font-bold text-dark mb-6 pb-4 border-b border-slate-100 flex items-center gap-2">
+                        <span contenteditable="true" onblur="handleEdit('${dayKey}', 'theme', this)">${data.theme}</span>
+                        <span class="text-xs font-normal text-slate-400 bg-slate-100 px-2 py-1 rounded">✎</span>
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-4 rounded-xl relative group">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-xl">🌅</span>
+                                <h3 class="font-bold text-slate-700">早餐 Breakfast</h3>
+                            </div>
+                            <ul class="editable-list text-slate-600 leading-relaxed" 
+                               contenteditable="true" 
+                               onblur="handleEdit('${dayKey}', 'breakfast', this)">${data.breakfast}</ul>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-xl relative group">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-xl">☀️</span>
+                                <h3 class="font-bold text-slate-700">午餐 Lunch</h3>
+                            </div>
+                            <ul class="editable-list text-slate-600 leading-relaxed" 
+                               contenteditable="true" 
+                               onblur="handleEdit('${dayKey}', 'lunch', this)">${data.lunch}</ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 bg-blue-50 border border-blue-100 p-3 rounded-lg flex flex-col gap-2 text-sm text-primary">
+                        <span class="font-bold shrink-0">🍪 下午加餐:</span>
+                        <ul class="editable-list pl-4" 
+                              contenteditable="true" 
+                              onblur="handleEdit('${dayKey}', 'snack', this)">${data.snack}</ul>
+                    </div>
+
+                    <div class="mt-6 bg-orange-50 border border-orange-100 p-5 rounded-xl relative overflow-hidden">
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-xl">🌙</span>
+                                <h3 class="font-bold text-slate-800">晚餐 Dinner</h3> <span class="bg-accent text-white text-xs px-2 py-0.5 rounded ml-2">18:30 前</span>
+                            </div>
+                            <ul class="editable-list dinner-list text-slate-600 leading-relaxed" 
+                               contenteditable="true" 
+                               onblur="handleEdit('${dayKey}', 'dinner', this)">${data.dinner}</ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function switchDay(dayKey) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('tab-active', 'bg-white');
+                btn.classList.add('bg-white');
+                btn.innerText = rawMealData[btn.id.replace('tab-', '')].theme.split('：')[0].split(' ')[1];
+            });
+            const activeBtn = document.getElementById('tab-' + dayKey);
+            activeBtn.classList.remove('bg-white');
+            activeBtn.classList.add('tab-active');
+            renderDay(dayKey);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initData();
+            switchDay('mon');
+        });
+    </script>
+</body>
+</html>
